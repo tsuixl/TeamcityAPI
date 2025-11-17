@@ -48,13 +48,14 @@ public class SvnTaskExecutor
     private async Task<bool> TriggerSvnTask(BuildType buildType, SvnTaskOptions opts)
     {
         var uniqueId = opts.GetSvnUniqueId();
-
         var parame = new TriggerOptions()
         {   
             Comment = "",
             Parameters = new Dictionary<string, string>()
             {
-                {opts.findParamName, uniqueId}
+                {opts.findParamName, uniqueId},
+                {"desSvnPath", opts.desAgentSvnPath},
+                {"srcAgentIp", opts.srcAgentIp}
             }
         };
         var build = await TeamcityRestApi.Instance.Client.Builds.TriggerBuildAsync(buildType.Id, parame);
