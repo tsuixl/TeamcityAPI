@@ -23,9 +23,9 @@ public class SvnTaskExecutor
         var uniqueId = opts.GetSvnUniqueId();
         
         // 1. 查找所有包含SVN的BuildType，获取正在运行的Build列表，取消符合条件的Build
-        var targetBuildTypes = await GetSvnBuildTypesAsync();
+        var targetBuildTypes = await GetSvnBuildTypesAsync(opts.svnProjectName);
         var activeBuilds = await GetActiveBuildsAsync(targetBuildTypes);
-        var cancelBuilds = TryCancelBuildAsync(activeBuilds, opts.findParamName, uniqueId);
+        var cancelBuilds = TryCancelBuildAsync(activeBuilds, opts.svnFlag, uniqueId);
         LogUtil.Debug(cancelBuilds.Result);
         
         // 2. 查找BuildType，是否有空闲。选择一个空闲的BuildType，触发构建
@@ -53,9 +53,14 @@ public class SvnTaskExecutor
             Comment = "",
             Parameters = new Dictionary<string, string>()
             {
-                {opts.findParamName, uniqueId},
-                {"desSvnPath", opts.desAgentSvnPath},
-                {"srcAgentIp", opts.srcAgentIp}
+                {opts.svnFlag, uniqueId},
+                {"env.svnAgentPath", opts.desAgentSvnPath},
+                {"env.svnAgentIp", opts.srcAgentIp},
+                {"env.svnPatchName", opts.patchName},
+                {"env.svnBuildPath", opts.buildPath},
+                {"env.svnBuildName", opts.buildName},
+                {"env.svnProjectPath", opts.projectPath},
+                {"env.svnPath", opts.desAgentSvnPath}
             }
         };
         var build = await TeamcityRestApi.Instance.Client.Builds.TriggerBuildAsync(buildType.Id, parame);
@@ -68,10 +73,10 @@ public class SvnTaskExecutor
         return false;
     }
     
-    private async Task<List<BuildType>> GetSvnBuildTypesAsync()
+    private async Task<List<BuildType>> GetSvnBuildTypesAsync(string svnProjectName)
     {
         var svnBuildTypes = await TeamcityRestApi.Instance.Client.Projects.SearchBuildConfigurationsByNameAsync(
-            projectId: "Unity");
+            projectId: svnProjectName);
 
         var result = new List<BuildType>();
         foreach (var buildType in svnBuildTypes.Items)

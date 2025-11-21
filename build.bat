@@ -6,7 +6,7 @@ echo ========================================
 echo.
 
 :: 设置输出目录
-set OUTPUT_DIR=TeamcityAPI\Build
+set OUTPUT_DIR=TeamcityAPI\Build\Win64
 set PROJECT_PATH=TeamcityAPI\TeamcityAPI.csproj
 
 :: 清理旧的构建文件

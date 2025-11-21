@@ -13,10 +13,10 @@ public static class ExampleUsage
 
     public static class ExampleDefine
     {
-        public const string k_TestServerUrl = "http://localhost:8111";
+        public const string k_TestServerUrl = "http://10.11.4.168:8111";
         public const string k_TestAccessToken = "eyJ0eXAiOiAiVENWMiJ9.VWllUkVtOXU4am1zSVViREQ0SVFDOGdmYTRF.NWY4YjU1NDItMGIzYy00OTg4LWIyMjItZWM0N2M5MDEwZGVh";
-        public const string k_TestUsername = "tsui";
-        public const string k_TestPassword = "qwerqwer";
+        public const string k_TestUsername = "odin";
+        public const string k_TestPassword = "123456";
     }
     
     /// <summary>
